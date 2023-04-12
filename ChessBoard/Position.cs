@@ -1,16 +1,16 @@
 ﻿
-namespace Board
+namespace ChessBoard
 {
     class Position
     {
-        public int Line { get; set; }   
+        public int Line { get; set; }
         public int Column { get; set; }
 
 
         public Position(int line, int column)
         {
-            this.Line = line;
-            this.Column = column;
+            Line = line;
+            Column = column;
         }
 
         public override string ToString()
