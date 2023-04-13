@@ -31,6 +31,7 @@ namespace ChessBoard
             ValidatePosition(pos);
             return Piece(pos) != null;
         }
+
         public void InsertPiece(Piece p, Position pos)
         {
             Pieces[pos.Line, pos.Column] = p;
