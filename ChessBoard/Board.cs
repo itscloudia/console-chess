@@ -24,6 +24,7 @@ namespace ChessBoard
         public void InsertPiece(Piece p, Position pos)
         {
             Pieces[pos.Line, pos.Column] = p;
+            p.position = pos;
         }
     }
 }
