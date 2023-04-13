@@ -1,0 +1,7 @@
+﻿
+namespace ChessBoard
+{
+    class BoardException
+    {
+    }
+}
