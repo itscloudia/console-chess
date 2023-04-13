@@ -21,10 +21,37 @@ namespace ChessBoard
             return Pieces[lines, columns];
         }
 
+        public Piece Piece(Position pos)
+        {
+            return Pieces[pos.Line, pos.Column];
+        }
+
+        public bool DoesPieceExist(Position pos)
+        {
+            ValidatePosition(pos);
+            return Piece(pos) != null;
+        }
         public void InsertPiece(Piece p, Position pos)
         {
             Pieces[pos.Line, pos.Column] = p;
             p.position = pos;
+        }
+
+        public bool IsPositionValid(Position pos)
+        {
+            if(pos.Line<0 || pos.Line >= Lines || pos.Column<0 || pos.Column >= Columns)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public void ValidatePosition(Position pos)
+        {
+            if (!IsPositionValid(pos))
+            {
+                throw new BoardException("Invalid position!");
+            }
         }
     }
 }
