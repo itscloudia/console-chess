@@ -7,13 +7,18 @@ namespace ChessBoard
 
         public int Columns { get; set; }
 
-        private Piece[,] pieces;
+        private Piece[,] Pieces;
 
         public Board(int lines, int columns)
         {
             Lines = lines;
             Columns = columns;
-            pieces = new Piece[lines, columns];
+            Pieces = new Piece[lines, columns];
+        }
+
+        public Piece Piece(int lines, int columns)
+        {
+            return Pieces[lines, columns];
         }
     }
 }
