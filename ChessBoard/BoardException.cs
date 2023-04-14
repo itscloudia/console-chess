@@ -1,7 +1,11 @@
 ﻿
 namespace ChessBoard
 {
-    class BoardException
+    class BoardException : Exception
     {
+        public BoardException(string msg) : base(msg)
+        {
+
+        }
     }
 }
