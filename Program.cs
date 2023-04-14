@@ -8,14 +8,17 @@ namespace console_chess
     {
         static void Main()
         {
-            BoardPosition boardPosition = new BoardPosition('c', 7);
+            Board board = new Board(8,8);
 
-            Console.WriteLine(boardPosition);
+            board.InsertPiece(new Rook(board, Color.Black), new Position(0, 0));
+            board.InsertPiece(new Rook(board, Color.Black), new Position(1, 3));
+            board.InsertPiece(new King(board, Color.Black), new Position(2, 4));
 
-            Console.WriteLine(boardPosition.ToPosition());
+            board.InsertPiece(new Rook(board, Color.White), new Position(3, 5));
 
-            Console.WriteLine();
-           
+
+            Screen.PrintBoard(board);
+
         }
     }
 }
