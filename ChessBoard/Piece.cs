@@ -15,5 +15,10 @@ namespace ChessBoard
             this.position = null;
             MoveCount = 0;
         }
+
+        public void IncrementMoveCount()
+        {
+            MoveCount++;
+        }
     }
 }
