@@ -42,6 +42,18 @@ namespace ChessBoard
             p.position = pos;
         }
 
+        public Piece RemovePiece(Position pos)
+        {
+            if (Piece(pos) == null)
+            {
+                return null;
+            }
+            Piece aux = Piece(pos);
+            aux.position = null;
+            Pieces[pos.Line, pos.Column] = null;
+            return aux;
+        }
+
         public bool IsPositionValid(Position pos)
         {
             if(pos.Line<0 || pos.Line >= Lines || pos.Column<0 || pos.Column >= Columns)
