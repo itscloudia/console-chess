@@ -7,12 +7,14 @@ namespace ChessPiece
         public Board board { get; private set; }
         private int turn;
         private Color currentPlayer;
+        public bool Finished { get; private set; }
 
         public Match()
         {
             this.board = new Board(8, 8);
             this.turn = 1;
             this.currentPlayer = Color.White;
+            Finished = false;
             InsertPieces();
         }
 
