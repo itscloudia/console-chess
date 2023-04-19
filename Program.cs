@@ -12,27 +12,36 @@ namespace console_chess
 
             while (!m.Finished)
             {
-                Console.Clear();
-                Screen.PrintBoard(m.board);
-                Console.WriteLine();
-                Console.WriteLine("Turn: " + m.Turn);
-                Console.WriteLine("Waiting move from: " + m.currentPlayer);
+                try
+                {
+                    Console.Clear();
+                    Screen.PrintBoard(m.board);
+                    Console.WriteLine();
+                    Console.WriteLine("Turn: " + m.Turn);
+                    Console.WriteLine("Waiting move from: " + m.currentPlayer);
 
-                Console.WriteLine();
-                Console.Write("Type the origin position: ");
-                Position origin = Screen.ReadBoardPosition().ToPosition();
+                    Console.WriteLine();
+                    Console.Write("Type the origin position: ");
+                    Position origin = Screen.ReadBoardPosition().ToPosition();
+                    m.ValidateOriginMovement(origin);
 
-                bool[,] possiblePositions = m.board.Piece(origin).PossibleMovements();
+                    bool[,] possiblePositions = m.board.Piece(origin).PossibleMovements();
 
-                Console.Clear();
+                    Console.Clear();
+                    Screen.PrintBoard(m.board, possiblePositions);
 
-                Screen.PrintBoard(m.board, possiblePositions);
-                Console.WriteLine();
-                Console.Write("Destination: ");
-                Position destination = Screen.ReadBoardPosition().ToPosition();
+                    Console.WriteLine();
+                    Console.Write("Destination: ");
+                    Position destination = Screen.ReadBoardPosition().ToPosition();
 
-                m.PerformMove(origin, destination);
+                    m.PerformMove(origin, destination);
+                }
+                catch(BoardException e)
+                {
+                    Console.WriteLine(e.Message);
+                    Console.ReadLine();
+                }
             }
         }
-    }
+    }   
 }

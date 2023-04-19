@@ -25,6 +25,22 @@ namespace ChessPiece
             SwitchPlayer();
         }
 
+        public void ValidateOriginMovement(Position pos)
+        {
+            if(board.Piece(pos) == null)
+            {
+                throw new BoardException("There's no piece in the chosen origin position. Type again.");
+            }
+            if(currentPlayer != board.Piece(pos).color)
+            {
+                throw new BoardException("The chosen piece isn't yours. Type again.");
+
+            }
+            if(!board.Piece(pos).DoesMovementExist())
+            {
+                throw new BoardException("There's no possible movements for the chosen origin piece. Type again.");
+            }
+        }
         private void SwitchPlayer()
         {
             if(currentPlayer == Color.White)

@@ -21,6 +21,21 @@ namespace ChessBoard
             MoveCount++;
         }
         
+        public bool DoesMovementExist()
+        {
+            bool [,] mat = PossibleMovements();
+            for(int i = 0; i<board.Lines; i++)
+            {
+                for(int j = 0; j<board.Columns; j++)
+                {
+                    if(mat[i,j])
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
         public abstract bool [,] PossibleMovements();
     }
 }
