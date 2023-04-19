@@ -22,6 +22,31 @@ namespace console_chess
             Console.WriteLine("  a b c d e f g h");
         }
 
+        public static void PrintBoard(Board board, bool[,] possiblePositions)
+        {
+            ConsoleColor originalBackground = Console.BackgroundColor;
+            ConsoleColor alteredBackground = Console.DarkGray;
+
+            for (int i = 0; i < board.Lines; i++)
+            {
+                Console.Write(8 - i + " ");
+                for (int j = 0; j < board.Columns; j++)
+                {
+                    if(possiblePositions[i,j])
+                    {
+                        Console.BackgroundColor = alteredBackground;
+                    }
+                    else
+                    {
+                        Console.BackgroundColor = originalBackground;
+                    }
+                    PrintPiece(board.Piece(i, j));
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine("  a b c d e f g h");
+        }
+
         public static BoardPosition ReadBoardPosition()
         {
             string s = Console.ReadLine();

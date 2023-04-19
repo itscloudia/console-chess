@@ -18,6 +18,12 @@ namespace console_chess
                 Console.WriteLine();
                 Console.Write("Type the origin position: ");
                 Position origin = Screen.ReadBoardPosition().ToPosition();
+
+                bool[,] possiblePositions = m.board.Piece(origin).PossibleMovements();
+
+                Console.Clear();
+                Screen.PrintBoard(m.board);
+
                 Console.Write("Destination: ");
                 Position destination = Screen.ReadBoardPosition().ToPosition();
 
