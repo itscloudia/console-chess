@@ -10,7 +10,7 @@ namespace ChessPiece
         public Color currentPlayer {get; private set; }
         public bool Finished { get; private set; }
         private HashSet<Piece> Pieces;
-        private HashSet<Piece> CapturedPieces;
+        private HashSet<Piece> capturedPieces;
 
         public Match()
         {
@@ -18,7 +18,7 @@ namespace ChessPiece
             this.Turn = 1;
             this.currentPlayer = Color.White;
             Pieces = new HashSet<Piece>();
-            CapturedPieces = new HashSet<Piece>();
+            capturedPieces = new HashSet<Piece>();
             Finished = false;
             InsertPieces();
         }
@@ -70,7 +70,7 @@ namespace ChessPiece
         public HashSet<Piece> CapturedPieces (Color color)
         {
             HashSet<Piece> aux = new HashSet<Piece>();
-            foreach(Piece x in CapturedPieces)
+            foreach(Piece x in capturedPieces)
             {
                 if(x.color == color)
                 {
@@ -102,7 +102,7 @@ namespace ChessPiece
             board.InsertPiece(p, destination);
             if (capturedPiece != null)
             {
-                CapturedPieces.Add(capturedPiece);
+                capturedPieces.Add(capturedPiece);
             }
         }
 

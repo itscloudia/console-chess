@@ -15,10 +15,7 @@ namespace console_chess
                 try
                 {
                     Console.Clear();
-                    Screen.PrintBoard(m.board);
-                    Console.WriteLine();
-                    Console.WriteLine("Turn: " + m.Turn);
-                    Console.WriteLine("Waiting move from: " + m.currentPlayer);
+                    Screen.PrintMatch(m);
 
                     Console.WriteLine();
                     Console.Write("Type the origin position: ");
