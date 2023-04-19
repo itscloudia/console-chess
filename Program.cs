@@ -22,8 +22,9 @@ namespace console_chess
                 bool[,] possiblePositions = m.board.Piece(origin).PossibleMovements();
 
                 Console.Clear();
-                Screen.PrintBoard(m.board);
 
+                Screen.PrintBoard(m.board, possiblePositions);
+                Console.WriteLine();
                 Console.Write("Destination: ");
                 Position destination = Screen.ReadBoardPosition().ToPosition();
 

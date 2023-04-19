@@ -25,7 +25,7 @@ namespace console_chess
         public static void PrintBoard(Board board, bool[,] possiblePositions)
         {
             ConsoleColor originalBackground = Console.BackgroundColor;
-            ConsoleColor alteredBackground = Console.DarkGray;
+            ConsoleColor alteredBackground = ConsoleColor.DarkGray;
 
             for (int i = 0; i < board.Lines; i++)
             {
@@ -45,6 +45,7 @@ namespace console_chess
                 Console.WriteLine();
             }
             Console.WriteLine("  a b c d e f g h");
+            Console.BackgroundColor = originalBackground;
         }
 
         public static BoardPosition ReadBoardPosition()
