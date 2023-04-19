@@ -46,6 +46,13 @@ namespace ChessPiece
                 mat[pos.Line, pos.Column] = true;
             }
 
+             // Left
+            pos.DefineValues(position.Line, position.Column - 1);
+            if(board.IsPositionValid(pos) && CanItMove(pos))
+            {
+                mat[pos.Line, pos.Column] = true;
+            }
+
             // Southeast
             pos.DefineValues(position.Line +1, position.Column + 1);
             if(board.IsPositionValid(pos) && CanItMove(pos))

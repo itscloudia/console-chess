@@ -14,6 +14,9 @@ namespace console_chess
             {
                 Console.Clear();
                 Screen.PrintBoard(m.board);
+                Console.WriteLine();
+                Console.WriteLine("Turn: " + m.Turn);
+                Console.WriteLine("Waiting move from: " + m.currentPlayer);
 
                 Console.WriteLine();
                 Console.Write("Type the origin position: ");
@@ -28,7 +31,7 @@ namespace console_chess
                 Console.Write("Destination: ");
                 Position destination = Screen.ReadBoardPosition().ToPosition();
 
-                m.ExecuteMovement(origin, destination);
+                m.PerformMove(origin, destination);
             }
         }
     }

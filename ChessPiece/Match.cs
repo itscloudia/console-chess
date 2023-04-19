@@ -5,17 +5,37 @@ namespace ChessPiece
     class Match
     {
         public Board board { get; private set; }
-        private int turn;
-        private Color currentPlayer;
+        public int Turn { get; private set; }
+        public Color currentPlayer {get; private set; }
         public bool Finished { get; private set; }
 
         public Match()
         {
             this.board = new Board(8, 8);
-            this.turn = 1;
+            this.Turn = 1;
             this.currentPlayer = Color.White;
             Finished = false;
             InsertPieces();
+        }
+
+        public void PerformMove(Position origin, Position destination)
+        {
+            ExecuteMovement(origin, destination);
+            Turn ++;
+            SwitchPlayer();
+        }
+
+        private void SwitchPlayer()
+        {
+            if(currentPlayer == Color.White)
+            {
+                currentPlayer = Color.Black;
+            }
+            else
+            {
+                currentPlayer = Color.White;
+            }
+
         }
 
         public void ExecuteMovement(Position origin, Position destination)
