@@ -33,6 +33,7 @@ namespace console_chess
                     Console.WriteLine();
                     Console.Write("Destination: ");
                     Position destination = Screen.ReadBoardPosition().ToPosition();
+                    m.ValidateDestinationMovement(origin, destination);
 
                     m.PerformMove(origin, destination);
                 }

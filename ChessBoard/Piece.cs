@@ -36,6 +36,11 @@ namespace ChessBoard
             }
             return false;
         }
+
+        public bool CanItMoveTo(Position pos)
+        {
+            return PossibleMovements()[pos.Line, pos.Column];
+        }
         public abstract bool [,] PossibleMovements();
     }
 }
