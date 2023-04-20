@@ -11,6 +11,7 @@ namespace ChessPiece
         public bool Finished { get; private set; }
         private HashSet<Piece> Pieces;
         private HashSet<Piece> capturedPieces;
+        public bool Check {get; private set;}
 
         public Match()
         {
@@ -20,12 +21,40 @@ namespace ChessPiece
             Pieces = new HashSet<Piece>();
             capturedPieces = new HashSet<Piece>();
             Finished = false;
+            Check = false;
             InsertPieces();
         }
 
+        public void UndoMove(Position origin, Position destination, Piece capturedPiece)
+        {
+            Piece p = board.RemovePiece(destination);
+            p.DecrementMoveCount();
+            if(capturedPiece != null)
+            {
+                board.InsertPiece(capturedPiece, destination);
+                capturedPieces.Remove(capturedPiece);
+            }
+            board.InsertPiece(p, origin);
+        }
         public void PerformMove(Position origin, Position destination)
         {
-            ExecuteMovement(origin, destination);
+            Piece capturedPiece = ExecuteMovement(origin, destination);
+
+            if(IsItInCheck(currentPlayer))
+            {
+                UndoMove(origin, destination, capturedPiece);
+                throw new BoardException("You can't put yourself in check, loser!");
+            }
+
+            if(IsItInCheck(Adversary(currentPlayer)))
+            {
+                Check = true;
+            }
+            else
+            {
+                Check = false;
+            }
+
             Turn ++;
             SwitchPlayer();
         }
@@ -64,7 +93,6 @@ namespace ChessPiece
             {
                 currentPlayer = Color.White;
             }
-
         }
 
         public HashSet<Piece> CapturedPieces (Color color)
@@ -94,7 +122,7 @@ namespace ChessPiece
             return aux;
         }
 
-        public void ExecuteMovement(Position origin, Position destination)
+        public Piece ExecuteMovement(Position origin, Position destination)
         {
             Piece p = board.RemovePiece(origin);
             p.IncrementMoveCount();
@@ -104,8 +132,47 @@ namespace ChessPiece
             {
                 capturedPieces.Add(capturedPiece);
             }
+            return capturedPiece;
         }
 
+        private Color Adversary(Color color)
+        {
+            if(color == Color.White)
+            {
+                return Color.Black;
+            }
+            else
+            {
+                return Color.White;
+            }
+        }
+
+        private Piece King(Color color)
+        {
+            foreach(Piece x in InGamePieces(color))
+            {
+                if(x is King)
+                {
+                    return x;
+                }
+            }
+            return null; // Just in case :P
+        }
+
+        public bool IsItInCheck(Color color)
+        {
+            Piece K = King(color);
+
+            foreach(Piece x in InGamePieces(Adversary(color)))
+            {
+                bool[,] mat = x.PossibleMovements();
+                if(mat[K.position.Line, K.position.Column])
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         public void InsertNewPiece(char column, int line, Piece piece)
         {
             board.InsertPiece(piece, new BoardPosition(column, line).ToPosition());
