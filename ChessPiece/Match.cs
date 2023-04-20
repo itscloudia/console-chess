@@ -43,7 +43,8 @@ namespace ChessPiece
             if(IsItInCheck(currentPlayer))
             {
                 UndoMove(origin, destination, capturedPiece);
-                throw new BoardException("You can't put yourself in check, loser!");
+                Console.WriteLine();
+                throw new BoardException("You can't put yourself in check, type again!");
             }
 
             if(IsItInCheck(Adversary(currentPlayer)))
@@ -55,8 +56,15 @@ namespace ChessPiece
                 Check = false;
             }
 
-            Turn ++;
-            SwitchPlayer();
+            if(CheckmateTest(Adversary(currentPlayer)))
+            {
+                Finished = true;
+            }
+            else
+            {
+                Turn ++;
+                SwitchPlayer();   
+            }
         }
 
         public void ValidateOriginMovement(Position pos)
@@ -172,6 +180,37 @@ namespace ChessPiece
                 }
             }
             return false;
+        }
+
+        public bool CheckmateTest(Color color)
+        {
+            if(!IsItInCheck(color))
+            {
+                return false;
+            }
+
+            foreach(Piece x in InGamePieces(color))
+            {
+                bool[,] mat = x.PossibleMovements();
+                for(int i = 0; i<board.Lines; i++)
+                {
+                    for(int j = 0; j<board.Columns; j++)
+                    {
+                        if(mat[i,j])
+                        {
+                            Position destination = new Position(i,j);
+                            Piece capturedPiece = ExecuteMovement(x.position, destination);
+                            bool CheckmateTest = IsItInCheck(color);
+                            UndoMove(x.position, destination, capturedPiece);
+                            if(!CheckmateTest)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
         }
         public void InsertNewPiece(char column, int line, Piece piece)
         {

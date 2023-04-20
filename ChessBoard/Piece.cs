@@ -20,6 +20,11 @@ namespace ChessBoard
         {
             MoveCount++;
         }
+
+        public void DecrementMoveCount()
+        {
+            MoveCount--;
+        }
         
         public bool DoesMovementExist()
         {
