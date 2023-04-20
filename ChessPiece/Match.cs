@@ -198,10 +198,11 @@ namespace ChessPiece
                     {
                         if(mat[i,j])
                         {
+                            Position origin = x.position;
                             Position destination = new Position(i,j);
-                            Piece capturedPiece = ExecuteMovement(x.position, destination);
+                            Piece capturedPiece = ExecuteMovement(origin, destination);
                             bool CheckmateTest = IsItInCheck(color);
-                            UndoMove(x.position, destination, capturedPiece);
+                            UndoMove(origin, destination, capturedPiece);
                             if(!CheckmateTest)
                             {
                                 return false;
