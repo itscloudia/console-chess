@@ -86,7 +86,7 @@ namespace ChessPiece
 
         public void ValidateDestinationMovement(Position origin, Position destination)
         {
-            if(!board.Piece(origin).CanItMoveTo(destination))
+            if(!board.Piece(origin).PossibleMovement(destination))
             {
                 throw new BoardException("Destination position is invalid.");
             }
