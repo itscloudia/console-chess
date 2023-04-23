@@ -25,50 +25,46 @@ namespace ChessPiece
 
             Position pos = new Position(0,0);
             
+           
             // Northwest
-            pos.DefineValues(pos.Line - 1, pos.Column - 1);
-            while (board.IsPositionValid(pos) && CanItMove(pos)){
+            pos.DefineValues(position.Line - 1, position.Column - 1);
+            while (board.IsPositionValid(pos) && CanItMove(pos)) {
                 mat[pos.Line, pos.Column] = true;
-                if (board.Piece(pos) != null && board.Piece(pos).color != color)
-                {
+                if (board.Piece(pos) != null && board.Piece(pos).color != color) {
                     break;
                 }
                 pos.DefineValues(pos.Line - 1, pos.Column - 1);
             }
 
             // Northeast
-            pos.DefineValues(pos.Line - 1, pos.Column + 1);
-            while (board.IsPositionValid(pos) && CanItMove(pos)){
+            pos.DefineValues(position.Line - 1, position.Column + 1);
+            while (board.IsPositionValid(pos) && CanItMove(pos)) {
                 mat[pos.Line, pos.Column] = true;
-                if (board.Piece(pos) != null && board.Piece(pos).color != color)
-                {
+                if (board.Piece(pos) != null && board.Piece(pos).color != color) {
                     break;
                 }
                 pos.DefineValues(pos.Line - 1, pos.Column + 1);
             }
 
             // Southeast
-            pos.DefineValues(pos.Line + 1, pos.Column + 1);
-            while (board.IsPositionValid(pos) && CanItMove(pos)){
+            pos.DefineValues(position.Line + 1, position.Column + 1);
+            while (board.IsPositionValid(pos) && CanItMove(pos)) {
                 mat[pos.Line, pos.Column] = true;
-                if (board.Piece(pos) != null && board.Piece(pos).color != color) 
-                {
+                if (board.Piece(pos) != null && board.Piece(pos).color != color) {
                     break;
                 }
                 pos.DefineValues(pos.Line + 1, pos.Column + 1);
             }
 
             // Southwest
-            pos.DefineValues(pos.Line + 1, pos.Column - 1);
-            while (board.IsPositionValid(pos) && CanItMove(pos)){
+            pos.DefineValues(position.Line + 1, position.Column - 1);
+            while (board.IsPositionValid(pos) && CanItMove(pos)) {
                 mat[pos.Line, pos.Column] = true;
-                if (board.Piece(pos) != null && board.Piece(pos).color != color) 
-                {
+                if (board.Piece(pos) != null && board.Piece(pos).color != color) {
                     break;
                 }
                 pos.DefineValues(pos.Line + 1, pos.Column - 1);
             }
-
             return mat;
         }
     }
