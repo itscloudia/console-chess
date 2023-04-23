@@ -27,6 +27,57 @@ namespace ChessPiece
             InsertPieces();
         }
 
+        public Piece ExecuteMovement(Position origin, Position destination)
+        {
+            Piece p = board.RemovePiece(origin);
+            p.IncrementMoveCount();
+            Piece capturedPiece = board.RemovePiece(destination);
+            board.InsertPiece(p, destination);
+
+            if(capturedPiece != null)
+            {
+                capturedPieces.Add(capturedPiece);
+            }
+            
+            // Short Castle
+            if (p is King && destination.Column == origin.Column + 2) {
+                Position rookOrigin = new Position(origin.Line, origin.Column + 3);
+                Position destinationT = new Position(origin.Line, origin.Column + 1);
+                Piece T = board.RemovePiece(rookOrigin);
+                T.IncrementMoveCount();
+                board.InsertPiece(T, destinationT);
+            }
+
+            // Long Castle
+            if (p is King && destination.Column == origin.Column - 2) {
+                Position rookOrigin = new Position(origin.Line, origin.Column - 4);
+                Position destinationT = new Position(origin.Line, origin.Column - 1);
+                Piece T = board.RemovePiece(rookOrigin);
+                T.IncrementMoveCount();
+                board.InsertPiece(T, destinationT);
+            }
+
+            // En passant
+            if (p is Pawn) 
+            {
+                if (origin.Column != destination.Column && capturedPiece == null) 
+                {
+                    Position posP;
+                    if (p.color == Color.White) 
+                    {
+                        posP = new Position(destination.Line + 1, destination.Column);
+                    }
+                    else
+                    {
+                        posP = new Position(destination.Line - 1, destination.Column);
+                    }
+                    capturedPiece = board.RemovePiece(posP);
+                    capturedPieces.Add(capturedPiece);
+                }
+            }
+            return capturedPiece;
+        }
+
         public void UndoMove(Position origin, Position destination, Piece capturedPiece)
         {
             Piece p = board.RemovePiece(destination);
@@ -37,50 +88,44 @@ namespace ChessPiece
                 capturedPieces.Remove(capturedPiece);
             }
             board.InsertPiece(p, origin);
-        }
-        public void PerformMove(Position origin, Position destination)
-        {
-            Piece capturedPiece = ExecuteMovement(origin, destination);
 
-            if(IsItInCheck(currentPlayer))
-            {
-                UndoMove(origin, destination, capturedPiece);
-                Console.WriteLine();
-                throw new BoardException("You can't put yourself in check, type again!");
-            }
+             // Short Castle
+            if (p is King && destination.Column == origin.Column + 2) {
+                Position rookOrigin = new Position(origin.Line, origin.Column + 3);
+                Position destinationT = new Position(origin.Line, origin.Column + 1);
+                Piece T = board.RemovePiece(rookOrigin);
+                T.DecrementMoveCount();
+                board.InsertPiece(T, destinationT);
+            }   
 
-            Piece p = board.Piece(destination);
-
-            if(IsItInCheck(Adversary(currentPlayer)))
-            {
-                Check = true;
-            }
-            else
-            {
-                Check = false;
-            }
-
-            if(CheckmateTest(Adversary(currentPlayer)))
-            {
-                Finished = true;
-            }
-            else
-            {
-                Turn ++;
-                SwitchPlayer();   
+            // Long Castle
+            if (p is King && destination.Column == origin.Column - 2) {
+                Position rookOrigin = new Position(origin.Line, origin.Column - 4);
+                Position destinationT = new Position(origin.Line, origin.Column - 1);
+                Piece T = board.RemovePiece(rookOrigin);
+                T.DecrementMoveCount();
+                board.InsertPiece(T, destinationT);
             }
 
             // En passant
-            if (p is Pawn && (destination.Line == origin.Line - 2 || destination.Line == origin.Line + 2)) 
+            if (p is Pawn) 
             {
-                EnPassantVulnerable = p;
-            }
-            else 
-            {
-                EnPassantVulnerable = null;
+                if (origin.Column != destination.Column && capturedPiece == EnPassantVulnerable) 
+                {
+                    Piece pawn = board.RemovePiece(destination);
+                    Position posP;
+                    if (p.color == Color.White) 
+                    {
+                        posP = new Position(3, destination.Column);
+                    }
+                    else
+                    {
+                        posP = new Position(4, destination.Column);
+                    }
+                    board.InsertPiece(pawn, posP);
+                }
             }
         }
-
         public void ValidateOriginMovement(Position pos)
         {
             if(board.Piece(pos) == null)
@@ -144,17 +189,59 @@ namespace ChessPiece
             return aux;
         }
 
-        public Piece ExecuteMovement(Position origin, Position destination)
+        public void PerformMove(Position origin, Position destination)
         {
-            Piece p = board.RemovePiece(origin);
-            p.IncrementMoveCount();
-            Piece capturedPiece = board.RemovePiece(destination);
-            board.InsertPiece(p, destination);
-            if (capturedPiece != null)
+            Piece capturedPiece = ExecuteMovement(origin, destination);
+
+            if(IsItInCheck(currentPlayer))
             {
-                capturedPieces.Add(capturedPiece);
+                UndoMove(origin, destination, capturedPiece);
+                throw new BoardException("You can't put yourself in check! Type again: ");
             }
-            return capturedPiece;
+
+            Piece p = board.Piece(destination);
+
+            // Promotion 
+            if(p is Pawn)
+            {
+                if(p.color == Color.White && destination.Line == 0|| (p.color == Color.Black && destination.Line == 7))
+                {
+                    p = board.RemovePiece(destination);
+                    Pieces.Remove(p);
+                    Piece queen = new Queen(board, p.color);
+                    board.InsertPiece(queen, destination);
+                    Pieces.Add(queen);
+                }
+            }
+
+            if(IsItInCheck(Adversary(currentPlayer)))
+            {
+                Check = true;
+            }
+            else
+            {
+                Check = false;
+            }
+
+            if(CheckmateTest(Adversary(currentPlayer)))
+            {
+                Finished = true;
+            }
+            else
+            {
+                Turn++;
+                SwitchPlayer();
+            }
+
+            // En Passant
+            if (p is Pawn && (destination.Line == origin.Line - 2 || destination.Line == origin.Line + 2)) 
+            {
+                EnPassantVulnerable = p;
+            }
+            else
+            {
+                EnPassantVulnerable = null;
+            }
         }
 
         private Color Adversary(Color color)
@@ -227,9 +314,9 @@ namespace ChessPiece
             }
             return true;
         }
-        public void InsertNewPiece(char column, int line, Piece piece)
+        public void InsertNewPiece(char Column, int line, Piece piece)
         {
-            board.InsertPiece(piece, new BoardPosition(column, line).ToPosition());
+            board.InsertPiece(piece, new BoardPosition(Column, line).ToPosition());
             Pieces.Add(piece);
         }
         private void InsertPieces()
@@ -238,7 +325,7 @@ namespace ChessPiece
             InsertNewPiece('b', 1, new Knight(board, Color.White));
             InsertNewPiece('c', 1, new Bishop(board, Color.White));
             InsertNewPiece('d', 1, new Queen(board, Color.White));
-            InsertNewPiece('e', 1, new King(board, Color.White));
+            InsertNewPiece('e', 1, new King(board, Color.White, this));
             InsertNewPiece('f', 1, new Bishop(board, Color.White));
             InsertNewPiece('g', 1, new Knight(board, Color.White));
             InsertNewPiece('h', 1, new Rook(board, Color.White));
@@ -255,7 +342,7 @@ namespace ChessPiece
             InsertNewPiece('b', 8, new Knight(board, Color.Black));
             InsertNewPiece('c', 8, new Bishop(board, Color.Black));
             InsertNewPiece('d', 8, new Queen(board, Color.Black));
-            InsertNewPiece('e', 8, new King(board, Color.Black));
+            InsertNewPiece('e', 8, new King(board, Color.Black, this));
             InsertNewPiece('f', 8, new Bishop(board, Color.Black));
             InsertNewPiece('g', 8, new Knight(board, Color.Black));
             InsertNewPiece('h', 8, new Rook(board, Color.Black));
