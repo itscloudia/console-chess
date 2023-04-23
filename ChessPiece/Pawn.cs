@@ -2,7 +2,6 @@ using ChessBoard;
 
 namespace ChessPiece 
 {
-
     class Pawn : Piece 
     {
 

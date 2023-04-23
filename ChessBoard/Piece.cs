@@ -1,5 +1,4 @@
-﻿
-namespace ChessBoard
+﻿namespace ChessBoard
 {
     abstract class Piece
     {

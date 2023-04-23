@@ -1,5 +1,4 @@
-﻿using System;
-using ChessBoard;
+﻿using ChessBoard;
 using ChessPiece;
 
 namespace console_chess

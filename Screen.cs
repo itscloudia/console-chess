@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using ChessBoard;
+﻿using ChessBoard;
 using ChessPiece;
 
 namespace console_chess
