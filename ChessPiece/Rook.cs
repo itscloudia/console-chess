@@ -1,5 +1,4 @@
-﻿
-using ChessBoard;
+﻿using ChessBoard;
 
 namespace ChessPiece
 {

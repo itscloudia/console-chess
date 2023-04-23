@@ -40,6 +40,8 @@ namespace console_chess
                     Console.ReadLine();
                 }
             }
+            Console.Clear();
+            Screen.PrintMatch(m);
         }
     }   
 }
