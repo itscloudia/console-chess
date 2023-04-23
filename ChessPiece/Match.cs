@@ -12,6 +12,7 @@ namespace ChessPiece
         private HashSet<Piece> Pieces;
         private HashSet<Piece> capturedPieces;
         public bool Check {get; private set;}
+        public Piece EnPassantVulnerable{get; private set;}
 
         public Match()
         {
@@ -22,6 +23,7 @@ namespace ChessPiece
             capturedPieces = new HashSet<Piece>();
             Finished = false;
             Check = false;
+            EnPassantVulnerable = null;
             InsertPieces();
         }
 
@@ -47,6 +49,8 @@ namespace ChessPiece
                 throw new BoardException("You can't put yourself in check, type again!");
             }
 
+            Piece p = board.Piece(destination);
+
             if(IsItInCheck(Adversary(currentPlayer)))
             {
                 Check = true;
@@ -64,6 +68,16 @@ namespace ChessPiece
             {
                 Turn ++;
                 SwitchPlayer();   
+            }
+
+            // En passant
+            if (p is Pawn && (destination.Line == origin.Line - 2 || destination.Line == origin.Line + 2)) 
+            {
+                EnPassantVulnerable = p;
+            }
+            else 
+            {
+                EnPassantVulnerable = null;
             }
         }
 
